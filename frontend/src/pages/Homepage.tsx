@@ -1,9 +1,9 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import { MdDelete, MdEdit } from "react-icons/md";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { useEffect, useState } from 'react';
-import { useTravelstore } from '../store/travel';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useEffect, useState } from "react";
+import { useTravelstore } from "../store/travel";
 
 interface Travel {
   _id: string | null;
@@ -33,11 +33,10 @@ const HomePage = () => {
   };
 
   const handleEdit = (travel: Travel) => {
-  
     setEditTravelDetails({
-      ...travel, 
+      ...travel,
       location: travel.location || "",
-      description: travel.description || ""
+      description: travel.description || "",
     });
   };
 
@@ -66,29 +65,48 @@ const HomePage = () => {
   }, [fetchTravels]);
 
   return (
-    <section className='dark:bg-blue-900 h-[100vh]'>
-      <div className='grid place-content-center py-20'>
-        <h1 className='grid place-content-center'>Your Travel Memories 🚀</h1>
+    <section className="dark:bg-blue-900 h-[100vh]">
+      <div className="grid place-content-center py-20">
+        <h1 className="grid place-content-center">Your Travel Memories 🚀</h1>
 
         {travels && travels.length > 0 ? (
-          <div className='grid grid-cols-4 gap-4 py-10 '>
-            {travels.map((travel: Travel) => (
-              <div key={travel._id || "new"} className='w-56 p-1 shadow-lg rounded-md '>
-                <img src={travel.image} alt={travel.name} className="w-full h-32 object-cover rounded-md" />
-                <h2 className='font-thin'>{travel.name}</h2>
-                <p className='text-sm text-gray-500'>R{travel.price}</p>
-                <div className='flex space-x-2'>
-                  <MdDelete className= 'bg-red-400 text-white text-lg rounded-sm'onClick={() => handleDelete(travel._id)} />
-                  <MdEdit className= 'bg-blue-400 text-white text-lg rounded-sm' onClick={() => handleEdit(travel)} />
+          <div className="grid grid-cols-4 gap-4 py-10">
+            {travels.map((travel: Travel, index: number) => {
+              // Skip invalid or undefined travel entries
+              if (!travel || !travel.image) {
+                console.warn(`Travel item at index ${index} is invalid:`, travel);
+                return null;
+              }
+
+              return (
+                <div key={travel._id || `new-${index}`} className="w-56 p-1 shadow-lg rounded-md">
+                  <img
+                    src={travel.image}
+                    alt={travel.name}
+                    className="w-full h-32 object-cover rounded-md"
+                  />
+                  <h2 className="font-thin">{travel.name}</h2>
+                  <h2 className="font-thin">{travel.location}</h2>
+                
+                  <div className="flex space-x-2">
+                    <MdDelete
+                      className="bg-red-400 text-white text-lg rounded-sm"
+                      onClick={() => handleDelete(travel._id)}
+                    />
+                    <MdEdit
+                      className="bg-blue-400 text-white text-lg rounded-sm"
+                      onClick={() => handleEdit(travel)}
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         ) : (
           <h1>No travel memories found 😥</h1>
         )}
 
-        <div className='font-bold text-blue-400 hover:underline'>
+        <div className="font-bold text-blue-400 hover:underline">
           <Link to="/create">Create a new travel memory</Link>
         </div>
 
@@ -97,40 +115,56 @@ const HomePage = () => {
             className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center modal-overlay"
             onClick={handleOutsideClick}
           >
-            <div className="bg-white p-8 rounded-lg shadow-lg w-96" onClick={(e) => e.stopPropagation()}>
+            <div
+              className="bg-white p-8 rounded-lg shadow-lg w-96"
+              onClick={(e) => e.stopPropagation()}
+            >
               <h2 className="text-xl font-bold mb-4">Edit Travel</h2>
               <label className="block mb-2">Name</label>
               <input
                 type="text"
                 value={editTravelDetails?.name}
-                onChange={(e) => setEditTravelDetails({ ...editTravelDetails!, name: e.target.value })}
+                onChange={(e) =>
+                  setEditTravelDetails({ ...editTravelDetails!, name: e.target.value })
+                }
                 className="w-full p-2 mb-4 border rounded"
               />
               <label className="block mb-2">Price</label>
               <input
                 type="number"
                 value={editTravelDetails?.price}
-                onChange={(e) => setEditTravelDetails({ ...editTravelDetails!, price: parseFloat(e.target.value) })}
+                onChange={(e) =>
+                  setEditTravelDetails({ ...editTravelDetails!, price: parseFloat(e.target.value) })
+                }
                 className="w-full p-2 mb-4 border rounded"
               />
               <label className="block mb-2">Image URL</label>
               <input
                 type="text"
                 value={editTravelDetails?.image}
-                onChange={(e) => setEditTravelDetails({ ...editTravelDetails!, image: e.target.value })}
+                onChange={(e) =>
+                  setEditTravelDetails({ ...editTravelDetails!, image: e.target.value })
+                }
                 className="w-full p-2 mb-4 border rounded"
               />
               <label className="block mb-2">Location</label>
               <input
                 type="text"
                 value={editTravelDetails?.location}
-                onChange={(e) => setEditTravelDetails({ ...editTravelDetails!, location: e.target.value })}
+                onChange={(e) =>
+                  setEditTravelDetails({ ...editTravelDetails!, location: e.target.value })
+                }
                 className="w-full p-2 mb-4 border rounded"
               />
               <label className="block mb-2">Description</label>
               <textarea
                 value={editTravelDetails?.description}
-                onChange={(e) => setEditTravelDetails({ ...editTravelDetails!, description: e.target.value })}
+                onChange={(e) =>
+                  setEditTravelDetails({
+                    ...editTravelDetails!,
+                    description: e.target.value,
+                  })
+                }
                 className="w-full p-2 mb-4 border rounded"
               />
               <div className="flex space-x-4">
