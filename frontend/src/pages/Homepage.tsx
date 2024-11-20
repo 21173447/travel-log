@@ -72,7 +72,6 @@ const HomePage = () => {
         {travels && travels.length > 0 ? (
           <div className="grid grid-cols-4 gap-4 py-10">
             {travels.map((travel: Travel, index: number) => {
-              // Skip invalid or undefined travel entries
               if (!travel || !travel.image) {
                 console.warn(`Travel item at index ${index} is invalid:`, travel);
                 return null;

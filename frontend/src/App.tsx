@@ -1,20 +1,15 @@
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import React from 'react';
+import { Outlet } from 'react-router-dom';
+import NavBar from './Components/NavBar';
 
-import CreateTravel from "./pages/CreateTravel";
-import NavBar from "./Components/NavBar";
-import Homepage from "./pages/Homepage";
-
-
-function App() {
+const App: React.FC = () => {
   return (
-    <Router>
-      <NavBar/>
-      <Routes> 
-         <Route path="/" element = {<Homepage/>}/>
-        <Route path="/create" element={<CreateTravel />} />
-      </Routes>
-    </Router>
+    <div>
+      <NavBar /> 
+    
+      <Outlet /> 
+    </div>
   );
-}
+};
 
 export default App;
